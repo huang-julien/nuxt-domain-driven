@@ -56,7 +56,6 @@ export default defineNuxtModule<ModuleOptions>({
     }
 
     nuxt.hook('pages:extend', (pages) => {
-      console.log(registeredPages, '!!!!!!!!!!!!!!')
       pages.push(...registeredPages)
     })
   },
