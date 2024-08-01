@@ -7,36 +7,76 @@ Find and replace all on all files (CMD+SHIFT+F):
 - Description: My new Nuxt module
 -->
 
-# My Module
+# @huang-julien/nuxt-domain-driven
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module for doing amazing things.
+A hyper opiniated module for another nuxt directory structure.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
 <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
 <!-- - [📖 &nbsp;Documentation](https://example.com) -->
-
-## Features
-
-<!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
 
 ## Quick Setup
 
 Install the module to your Nuxt application with one command:
 
 ```bash
-npx nuxi module add my-module
+npx nuxi module add @huang-julien/nuxt-domain-driven
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+## Feature
 
+This modules augment the architecture of nuxt.
+
+It will read the `domainDirectory` (`src` by default) and auto-import files in each directories following the nuxt directory structure.
+
+### directories
+
+- components
+- composables
+- pages
+- utils
+
+### Prefix
+
+#### Components
+
+Components name are prefixed with the Domain's name. For example:
+
+`src/Marketing/components/SomeComponent.vue`
+
+```html
+<template>
+  <MarketingSomeComponent />
+</template>
+```
+
+#### Pages
+
+Pages paths are prefixed with the domain's name. For example:
+
+The route of `src/Payments/pages/some-page.vue` will be `/Payments/some-page`.
+
+If you need to map the name to another path, you can use `domainPathAlias`.
+
+When defining 
+
+```ts
+export default defineNuxtModule({
+  modules: ['@huang-julien/nuxt-domain-driven'],
+  domainDrivenConfig: {
+    domainPathAlias: {
+      'Payments': '/p'
+    }
+  }
+})
+```
+
+`src/Payments/pages/some-page.vue` will be accessible at `/p/some-page`
 
 ## Contribution
 
