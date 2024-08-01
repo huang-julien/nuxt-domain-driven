@@ -10,11 +10,16 @@ export interface ModuleOptions {
    * @default "src"
    */
   directory?: string
+  /**
+   * Path alias to use to map the Domain name
+   * @example { 'Marketing': '/', 'Sales': '/s'}
+   */
+  domainAlias?: Record<string, string>
 }
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'nuxt-domain-driven',
+    name: '@huang-julien/nuxt-domain-driven',
     configKey: 'ddd',
   },
   // Default configuration options of the Nuxt module
@@ -50,7 +55,7 @@ export default defineNuxtModule<ModuleOptions>({
         const pagesDir = join(directoryDir, content, 'pages')
 
         if (directoryExist(pagesDir)) {
-          registeredPages.push(...registerPages(pagesDir, directoryDir, content))
+          registeredPages.push(...registerPages(pagesDir, directoryDir, options.domainAlias?.[content] ?? content))
         }
       }
     }
@@ -73,7 +78,8 @@ function registerPages(pagesDir: string, srcDir: string, prefix: string, pages: 
       registerPages(join(pagesDir, content), srcDir, prefix, pages)
     }
     else {
-      const { path } = toVueRouter4(join(pagesDir.split(srcDir)[1]))
+      const pathToParse = prefix ? join(prefix, pagesDir.split(join(srcDir, content))[1]) : pagesDir.split(srcDir)[1]
+      const { path } = toVueRouter4(pathToParse)
 
       pages.push({
         path,
