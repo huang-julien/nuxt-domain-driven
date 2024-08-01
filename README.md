@@ -17,8 +17,8 @@ Find and replace all on all files (CMD+SHIFT+F):
 A hyper opiniated module for another nuxt directory structure.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+  <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
+  <!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
 ## Quick Setup
 
@@ -61,19 +61,21 @@ Pages paths are prefixed with the domain's name. For example:
 
 The route of `src/Payments/pages/some-page.vue` will be `/Payments/some-page`.
 
-If you need to map the name to another path, you can use `domainPathAlias`.
+If you need to map the name to another path, you can use `domains.domainPathAlias`.
 
-When defining 
+When defining
 
 ```ts
 export default defineNuxtModule({
-  modules: ['@huang-julien/nuxt-domain-driven'],
+  modules: ["@huang-julien/nuxt-domain-driven"],
   domainDrivenConfig: {
-    domainPathAlias: {
-      'Payments': '/p'
-    }
-  }
-})
+    domains: {
+      domainPathAlias: {
+        Payments: "/p",
+      },
+    },
+  },
+});
 ```
 
 `src/Payments/pages/some-page.vue` will be accessible at `/p/some-page`
@@ -109,16 +111,13 @@ export default defineNuxtModule({
 
 </details>
 
-
 <!-- Badges -->
+
 [npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-version-href]: https://npmjs.com/package/my-module
-
 [npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-downloads-href]: https://npmjs.com/package/my-module
-
 [license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
 [license-href]: https://npmjs.com/package/my-module
-
 [nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
 [nuxt-href]: https://nuxt.com

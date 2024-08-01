@@ -10,11 +10,13 @@ export interface ModuleOptions {
    * @default "src"
    */
   directory?: string
-  /**
-   * Path alias to use to map the Domain name
-   * @example { 'Marketing': '/', 'Sales': '/s'}
-   */
-  domainPathAlias?: Record<string, string>
+  domains?: {
+    /**
+     * Path alias to use to map the Domain name
+     * @example { 'Marketing': '/', 'Sales': '/s'}
+     */
+    domainPathAlias?: Record<string, string>
+  }
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -55,7 +57,7 @@ export default defineNuxtModule<ModuleOptions>({
         const pagesDir = join(directoryDir, content, 'pages')
 
         if (directoryExist(pagesDir)) {
-          registeredPages.push(...registerPages(pagesDir, directoryDir, options.domainPathAlias?.[content] ?? content))
+          registeredPages.push(...registerPages(pagesDir, directoryDir, options.domains?.domainPathAlias?.[content] ?? content))
         }
       }
     }
