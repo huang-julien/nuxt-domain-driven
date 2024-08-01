@@ -5,6 +5,11 @@
   "repository": "huang-julien/nuxt-domain-driven",
   "license": "MIT",
   "type": "module",
+  "keywords": [
+    "nuxt",
+    "nuxt-modules",
+    "architecture"
+  ],
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",
