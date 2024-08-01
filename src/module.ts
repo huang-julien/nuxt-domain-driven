@@ -20,7 +20,7 @@ export interface ModuleOptions {
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: '@huang-julien/nuxt-domain-driven',
-    configKey: 'ddd',
+    configKey: 'domainDrivenConfig',
   },
   // Default configuration options of the Nuxt module
   defaults: {},
