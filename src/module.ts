@@ -57,7 +57,7 @@ export default defineNuxtModule<ModuleOptions>({
         const pagesDir = join(directoryDir, content, 'pages')
 
         if (directoryExist(pagesDir)) {
-          registeredPages.push(...generatePages(options, pagesDir, content))
+          registeredPages.push(...generatePages(options, pagesDir, content, [], true))
         }
       }
     }
@@ -72,7 +72,7 @@ function directoryExist(directory: string): boolean {
   return existsSync(directory) && lstatSync(directory).isDirectory()
 }
 
-function generatePages(moduleOptions: ModuleOptions, currentDir: string, prefix: string, pages: NuxtPage[] = []) {
+function generatePages(moduleOptions: ModuleOptions, currentDir: string, prefix: string, pages: NuxtPage[] = [], isRoot = false) {
   const nuxt = useNuxt()
 
   const pagesDir = join(nuxt.options.rootDir, moduleOptions.directory ?? 'src')
@@ -81,7 +81,7 @@ function generatePages(moduleOptions: ModuleOptions, currentDir: string, prefix:
 
   for (const content of dirContent) {
     if (fileExist(join(currentDir, content))) {
-      const pathToParse = content
+      const pathToParse = isRoot ? join(moduleOptions.domains?.domainPathAlias?.[prefix] ?? prefix, content) : content
       const relativePath = join(currentDir, content).replace(pagesDir + '/' + prefix + '/pages', '')
       const { path } = toVueRouter4(pathToParse)
 
