@@ -1,5 +1,5 @@
 import { readdirSync, lstatSync, existsSync } from 'node:fs'
-import { defineNuxtModule, addComponentsDir, addImportsDir } from '@nuxt/kit'
+import { defineNuxtModule, addComponentsDir, addImportsDir, useNuxt } from '@nuxt/kit'
 import { join } from 'pathe'
 import { toVueRouter4 } from 'unrouting'
 import type { NuxtPage } from '@nuxt/schema'
@@ -57,7 +57,7 @@ export default defineNuxtModule<ModuleOptions>({
         const pagesDir = join(directoryDir, content, 'pages')
 
         if (directoryExist(pagesDir)) {
-          registeredPages.push(...registerPages(pagesDir, directoryDir, options.domains?.domainPathAlias?.[content] ?? content))
+          registeredPages.push(...generatePages(options, pagesDir, content))
         }
       }
     }
@@ -72,23 +72,99 @@ function directoryExist(directory: string): boolean {
   return existsSync(directory) && lstatSync(directory).isDirectory()
 }
 
-function registerPages(pagesDir: string, srcDir: string, prefix: string, pages: NuxtPage[] = []) {
-  const contents = readdirSync(pagesDir)
+function generatePages(moduleOptions: ModuleOptions, currentDir: string, prefix: string, pages: NuxtPage[] = []) {
+  const nuxt = useNuxt()
 
-  for (const content of contents) {
-    if (directoryExist(join(pagesDir, content))) {
-      registerPages(join(pagesDir, content), srcDir, prefix, pages)
-    }
-    else {
-      const pathToParse = prefix ? join(prefix, pagesDir.split(join(srcDir, content))[1]) : pagesDir.split(srcDir)[1]
+  const pagesDir = join(nuxt.options.rootDir, moduleOptions.directory ?? 'src')
+
+  const dirContent = readdirSync(currentDir)
+
+  for (const content of dirContent) {
+    if (fileExist(join(currentDir, content))) {
+      const pathToParse = content
+      const relativePath = join(currentDir, content).replace(pagesDir + '/' + prefix + '/pages', '')
       const { path } = toVueRouter4(pathToParse)
+
+      const name = `${prefix}${relativePath.replace(/\//g, '-').replace(/\.vue$/, '')}`
 
       pages.push({
         path,
-        file: join(pagesDir, content),
+        file: join(currentDir, content),
+        children: [],
+        name,
       })
     }
   }
 
-  return pages
+  for (const content of dirContent) {
+    if (directoryExist(join(currentDir, content))) {
+      const parent = fileExist(join(currentDir, `${content}.vue`)) ? findParentPage(pages, join(currentDir, `${content}.vue`))?.children : pages
+      generatePages(moduleOptions, join(currentDir, content), prefix, parent)
+    }
+  }
+
+  return prepareRoutes(pages)
+}
+
+function prepareRoutes(routes: NuxtPage[], parent?: NuxtPage, names = new Set<string>()) {
+  for (const route of routes) {
+    // Remove -index
+    if (route.name) {
+      route.name = route.name
+        .replace(/\/index$/, '')
+        .replace(/\//g, '-')
+
+      if (names.has(route.name)) {
+        const existingRoute = findRouteByName(route.name, routes)
+        const extra = existingRoute?.name ? `is the same as \`${existingRoute.file}\`` : 'is a duplicate'
+        console.warn(`Route name generated for \`${route.file}\` ${extra}. You may wish to set a custom name using \`definePageMeta\` within the page file.`)
+      }
+    }
+
+    // Remove leading / if children route
+    if (parent && route.path[0] === '/') {
+      route.path = route.path.slice(1)
+    }
+
+    if (route.children?.length) {
+      route.children = prepareRoutes(route.children, route, names)
+    }
+
+    if (route.children?.find(childRoute => childRoute.path === '')) {
+      delete route.name
+    }
+
+    if (route.name) {
+      names.add(route.name)
+    }
+  }
+
+  return routes
+}
+
+function findParentPage(pages: NuxtPage[], path: string): NuxtPage | undefined {
+  for (const page of pages) {
+    const children = page.children
+    if (children && children.length > 0) {
+      const page = findParentPage(children, path)
+      if (page) {
+        return page
+      }
+    }
+    if (page.file === path) {
+      return page
+    }
+  }
+}
+function findRouteByName(name: string, routes: NuxtPage[]): NuxtPage | undefined {
+  for (const route of routes) {
+    if (route.name === name) {
+      return route
+    }
+  }
+  return findRouteByName(name, routes)
+}
+
+function fileExist(file: string): boolean {
+  return existsSync(file) && lstatSync(file).isFile()
 }
