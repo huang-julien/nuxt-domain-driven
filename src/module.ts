@@ -165,15 +165,6 @@ function prepareRoutes(routes: NuxtPage[], parent?: NuxtPage, names = new Set<st
   return routes
 }
 
-function findRouteByName(name: string, routes: NuxtPage[]): NuxtPage | undefined {
-  for (const route of routes) {
-    if (route.name === name) {
-      return route
-    }
-  }
-  return findRouteByName(name, routes)
-}
-
 enum SegmentParserState {
   initial,
   static,
