@@ -35,7 +35,9 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.12.4",
+    "escape-string-regexp": "^5.0.0",
     "pathe": "^1.1.2",
+    "ufo": "^1.5.4",
     "unrouting": "^0.0.1"
   },
   "devDependencies": {
