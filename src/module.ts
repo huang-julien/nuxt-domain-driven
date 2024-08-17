@@ -2,7 +2,7 @@ import { readdirSync, lstatSync, existsSync } from 'node:fs'
 import { defineNuxtModule, addComponentsDir, addImportsDir } from '@nuxt/kit'
 import { join } from 'pathe'
 import type { NuxtPage } from '@nuxt/schema'
-import { generatePages } from './generatePage'
+import { generatePages } from './generatePages'
 
 export interface ModuleOptions {
   /**
