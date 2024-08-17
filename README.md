@@ -25,7 +25,7 @@ A hyper opiniated module for another nuxt directory structure.
 Install the module to your Nuxt application with one command:
 
 ```bash
-npx nuxi module add @huang-julien/nuxt-domain-driven
+npx nuxi module add nuxt-domain-driven
 ```
 
 ## Feature
