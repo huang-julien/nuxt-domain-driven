@@ -23,6 +23,10 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'nuxt-domain-driven',
     configKey: 'domainDrivenConfig',
+    compatibility: {
+      bridge: false,
+      nuxt: '>=3',
+    },
   },
   // Default configuration options of the Nuxt module
   defaults: {},
