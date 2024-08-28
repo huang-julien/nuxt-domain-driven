@@ -3,6 +3,7 @@ import { defineNuxtModule, addComponentsDir, addImportsDir } from '@nuxt/kit'
 import { join } from 'pathe'
 import type { NuxtPage } from '@nuxt/schema'
 import { generatePages } from './generatePages'
+import { addServerDirWithDomain } from './server-dir'
 
 export interface ModuleOptions {
   /**
@@ -62,6 +63,11 @@ export default defineNuxtModule<ModuleOptions>({
 
         if (directoryExist(pagesDir)) {
           registeredPages.push(...(await generatePages(pagesDir, content)))
+        }
+
+        const serverDir = join(directoryDir, content, 'server')
+        if (directoryExist(serverDir)) {
+          await addServerDirWithDomain(serverDir, content)
         }
       }
     }
