@@ -1,10 +1,11 @@
 import { useNuxt, resolveFiles } from '@nuxt/kit'
-import { extname, relative } from 'pathe'
+import { extname, relative, join } from 'pathe'
 
 import type { NuxtPage } from '@nuxt/schema'
 import { joinURL, withLeadingSlash } from 'ufo'
 import escapeRE from 'escape-string-regexp'
 import { parseSegment, getRoutePath } from './utils'
+import type { ModuleOptions } from './module'
 
 interface ScannedFile {
   relativePath: string
@@ -12,7 +13,7 @@ interface ScannedFile {
   domain: string
 }
 
-export async function generatePages(dir: string, domain: string) {
+export async function generatePages(dir: string, domain: string, options: ModuleOptions) {
   const nuxt = useNuxt()
 
   const files = await resolveFiles(dir, `**/*{${nuxt.options.extensions.join(',')}}`)
@@ -29,7 +30,7 @@ export async function generatePages(dir: string, domain: string) {
 
     const route: NuxtPage = {
       name: domain,
-      path: '/' + domain,
+      path: join('/', options.domains?.domainPathAlias?.[domain] ?? domain),
       file: file.absolutePath,
       children: [],
     }

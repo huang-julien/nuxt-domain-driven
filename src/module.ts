@@ -62,7 +62,7 @@ export default defineNuxtModule<ModuleOptions>({
         const pagesDir = join(directoryDir, content, 'pages')
 
         if (directoryExist(pagesDir)) {
-          registeredPages.push(...(await generatePages(pagesDir, content)))
+          registeredPages.push(...(await generatePages(pagesDir, content, options)))
         }
 
         const serverDir = join(directoryDir, content, 'server')
