@@ -18,6 +18,7 @@ export interface ModuleOptions {
      */
     domainPathAlias?: Record<string, string>
   }
+  onPageGenerated?: (page: NuxtPage) => void | Promise<void>
 }
 
 export default defineNuxtModule<ModuleOptions>({

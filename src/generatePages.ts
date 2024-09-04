@@ -62,7 +62,9 @@ export async function generatePages(dir: string, domain: string, options: Module
         route.path += getRoutePath(tokens)
       }
     }
-
+    if (options.onPageGenerated) {
+      await options.onPageGenerated(route)
+    }
     parent.push(route)
   }
 
