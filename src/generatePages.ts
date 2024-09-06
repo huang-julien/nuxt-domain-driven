@@ -30,7 +30,7 @@ export async function generatePages(dir: string, domain: string, options: Module
 
     const route: NuxtPage = {
       name: domain,
-      path: join('/', options.domains?.domainPathAlias?.[domain] ?? domain),
+      path: (options.domains?.domainPathAlias?.[domain] ?? domain) ? join('/', options.domains?.domainPathAlias?.[domain] ?? domain) : '',
       file: file.absolutePath,
       children: [],
     }
