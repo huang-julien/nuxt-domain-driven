@@ -1,6 +1,6 @@
 {
   "name": "nuxt-domain-driven",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Hyper opinionated Nuxt module for domain driven architecture",
   "repository": "huang-julien/nuxt-domain-driven",
   "license": "MIT",
